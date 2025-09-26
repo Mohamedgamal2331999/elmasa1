@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-danger">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+<h1>Welcome, {{ user.username }}!</h1>
+<p>Your role: {{ user.role }}</p>
+<p>Use the navigation to access your sections.</p>
+{% endblock %}

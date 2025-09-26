@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Add Production{% endblock %}
+
+{% block content %}
+<h1>Add Production</h1>
+<form method="POST" action="{{ url_for('add_production') }}" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="details" class="form-label">Production Details</label>
+                <textarea class="form-control" id="details" name="details" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date" required>
+            </div>
+            <div class="mb-3">
+                <label for="product_name" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" required>
+            </div>
+            <div class="mb-3">
+                <label for="size" class="form-label">Size (cm): length - width - height</label>
+                <input type="text" class="form-control" id="size" name="size">
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" required>
+            </div>
+            <div class="mb-3">
+                <label for="broken_quantity" class="form-label">Broken Quantity</label>
+                <input type="number" class="form-control" id="broken_quantity" name="broken_quantity" value="0" min="0">
+            </div>
+            <div class="mb-3">
+                <label for="packing" class="form-label">Packing</label>
+                <input type="text" class="form-control" id="packing" name="packing" placeholder="e.g., 12 per box">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="product_photo" class="form-label">Product Photo</label>
+                <input type="file" class="form-control" id="product_photo" name="product_photo">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Add Production</button>
+</form>
+{% endblock %}

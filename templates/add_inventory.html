@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Add Inventory{% endblock %}
+
+{% block content %}
+<h1>Add Inventory</h1>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <div class="alert alert-danger">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+<form method="POST" action="{{ url_for('add_inventory') }}" enctype="multipart/form-data" id="inventoryForm">
+    <div class="mb-3">
+        <label for="item_type" class="form-label">Item Type</label>
+        <select class="form-control" id="item_type" name="item_type" required>
+            <option value="box">Box</option>
+            <option value="carton">Carton</option>
+            <option value="glass">Glass</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="quantity" class="form-label">Quantity</label>
+        <input type="number" class="form-control" id="quantity" name="quantity" required>
+    </div>
+    <div class="mb-3">
+        <label for="action" class="form-label">Action</label>
+        <select class="form-control" id="action" name="action" required>
+            <option value="in">In</option>
+            <option value="out">Out</option>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" name="date" required>
+    </div>
+    <div class="mb-3">
+        <label for="product_name" class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="product_name" name="product_name" required>
+    </div>
+    <div class="mb-3">
+        <label for="size" class="form-label">Size (cm): length - width - height</label>
+        <input type="text" class="form-control" id="size" name="size">
+    </div>
+    <div class="mb-3">
+        <label for="packing" class="form-label">Packing</label>
+        <input type="text" class="form-control" id="packing" name="packing" placeholder="e.g., 12 per box">
+    </div>
+    <!-- Removed product photo field as per request -->
+    <button type="submit" class="btn btn-success">Add Inventory</button>
+</form>
+<script>
+document.getElementById('inventoryForm').addEventListener('submit', function(event) {
+    const action = document.getElementById('action').value;
+    const quantity = parseInt(document.getElementById('quantity').value);
+    const productName = document.getElementById('product_name').value.trim();
+    const size = document.getElementById('size').value.trim();
+    const itemType = document.getElementById('item_type').value;
+    const form = this;
+
+    if (action === 'out') {
+        event.preventDefault(); // Prevent form submission while checking balance
+
+        fetch(`/api/check_inventory_balance?product_name=${encodeURIComponent(productName)}&size=${encodeURIComponent(size)}&item_type=${encodeURIComponent(itemType)}`)
+            .then(response => response.json())
+            .then(data => {
+                if (quantity > data.available_balance) {
+                    alert('Insufficient Balance Available');
+                } else {
+                    form.submit(); // Submit the form if balance is sufficient
+                }
+            })
+            .catch(error => {
+                console.error('Error checking inventory balance:', error);
+                alert('Error checking inventory balance');
+            });
+    }
+    // If action is 'in', allow normal form submission (no preventDefault called)
+});
+</script>
+{% endblock %}

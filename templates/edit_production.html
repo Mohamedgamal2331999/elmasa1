@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Production{% endblock %}
+
+{% block content %}
+<h1>Edit Production</h1>
+<form method="POST" action="{{ url_for('edit_production', production_id=production.id) }}" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="mb-3">
+                <label for="details" class="form-label">Production Details</label>
+                <textarea class="form-control" id="details" name="details" rows="4" required>{{ production.details }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date</label>
+                <input type="date" class="form-control" id="date" name="date" value="{{ production.date.strftime('%Y-%m-%d') }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="product_name" class="form-label">Product Name</label>
+                <input type="text" class="form-control" id="product_name" name="product_name" value="{{ production.product_name }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="size" class="form-label">Size (cm): length - width - height</label>
+                <input type="text" class="form-control" id="size" name="size" value="{{ production.size }}">
+            </div>
+            <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="{{ production.quantity }}" required>
+            </div>
+            <div class="mb-3">
+                <label for="broken_quantity" class="form-label">Broken Quantity</label>
+                <input type="number" class="form-control" id="broken_quantity" name="broken_quantity" value="{{ production.broken_quantity }}" min="0">
+            </div>
+            <div class="mb-3">
+                <label for="packing" class="form-label">Packing</label>
+                <input type="text" class="form-control" id="packing" name="packing" value="{{ production.packing }}" placeholder="e.g., 12 per box">
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                <label for="product_photo" class="form-label">Product Photo</label>
+                <input type="file" class="form-control" id="product_photo" name="product_photo">
+                {% if production.product_photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ production.product_photo) }}" alt="Product Photo" style="max-width: 200px; margin-top: 10px;">
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a href="{{ url_for('production') }}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
