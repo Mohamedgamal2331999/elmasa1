@@ -25,6 +25,10 @@ db = SQLAlchemy()
 # Initialize the database with the app
 db.init_app(app)
 
+# Ensure instance folder exists for SQLite
+if not os.path.exists('instance'):
+    os.makedirs('instance')
+
 # Create tables if they don't exist
 with app.app_context():
     db.create_all()
